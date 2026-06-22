@@ -96,12 +96,26 @@
   .hook.ordered .hero-wrapper{
     width:100%;
     text-align:center;
+    display:block;
   }
-  .hook.ordered .tile-grid{
-    position:relative;
-    width:260px;
-    height:140px;
-    margin:0 auto 44px;
+  .hook.ordered .hero-name{
+    display:block;
+    position:static;
+    font-size:clamp(28px,4vw,40px);
+    transform:rotate(0deg);
+    text-align:center;
+    line-height:1;
+    margin:0 0 14px;
+  }
+  .hook.ordered .hero-line{
+    display:block;
+    position:static;
+    font-size:clamp(17px,2.2vw,20px);
+    transform:rotate(0deg);
+    text-align:center;
+    max-width:520px;
+    margin:0 auto;
+    line-height:1.5;
   }
   
   /* Asymmetric positioning in scrambled state */
@@ -139,31 +153,13 @@
     opacity:1 !important;
   }
   
-  /* Transition back to centered ordered state */
+  /* Transition effect */
   .hero-name, .hero-line, .proof-strip-scatter{
     transition:all .8s cubic-bezier(.25,.46,.45,.94);
-  }
-  .hook.ordered .hero-name{
-    position:static;
-    font-size:clamp(28px,4vw,40px);
-    transform:rotate(0deg);
-    text-align:center;
-    line-height:1;
-    margin:0 0 14px;
-  }
-  .hook.ordered .hero-line{
-    position:static;
-    font-size:clamp(17px,2.2vw,20px);
-    transform:rotate(0deg);
-    text-align:center;
-    max-width:520px;
-    margin:0 auto;
-    line-height:1.5;
   }
   .hook.ordered .proof-strip-scatter{
     display:none;
   }
-  .tile-grid{
     position:relative;
     width:260px;
     height:140px;
