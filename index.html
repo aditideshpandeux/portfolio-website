@@ -67,10 +67,101 @@
 
   /* ---------- hook + thesis ---------- */
   .hook{
-    max-width:1080px;
-    margin:0 auto;
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:center;
+    padding:0 32px;
+    overflow:hidden;
+  }
+  .hook.scrambled .hero-wrapper{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+  }
+  .hook.scrambled .tile-grid{
+    position:absolute;
+    width:100%;
+    height:100%;
+    inset:0;
+    margin:0;
+  }
+  .hook.ordered{
+    min-height:auto;
+    align-items:center;
     padding:96px 32px 72px;
+  }
+  .hook.ordered .hero-wrapper{
+    width:100%;
     text-align:center;
+  }
+  .hook.ordered .tile-grid{
+    position:relative;
+    width:260px;
+    height:140px;
+    margin:0 auto 44px;
+  }
+  
+  /* Asymmetric positioning in scrambled state */
+  .hook.scrambled .hero-name{
+    position:absolute;
+    top:15%;
+    left:-5%;
+    font-size:clamp(48px,12vw,100px);
+    max-width:120%;
+    text-align:left;
+    line-height:0.9;
+    transform:rotate(-3deg);
+    margin:0;
+    animation:none !important;
+    opacity:1 !important;
+  }
+  .hook.scrambled .hero-line{
+    position:absolute;
+    bottom:20%;
+    right:5%;
+    font-size:14px;
+    max-width:280px;
+    text-align:left;
+    transform:rotate(2deg);
+    margin:0;
+    animation:none !important;
+    opacity:1 !important;
+  }
+  .hook.scrambled .proof-strip-scatter{
+    position:absolute;
+    bottom:35%;
+    left:10%;
+    font-size:11px;
+    transform:rotate(-2deg);
+    opacity:1 !important;
+  }
+  
+  /* Transition back to centered ordered state */
+  .hero-name, .hero-line, .proof-strip-scatter{
+    transition:all .8s cubic-bezier(.25,.46,.45,.94);
+  }
+  .hook.ordered .hero-name{
+    position:static;
+    font-size:clamp(28px,4vw,40px);
+    transform:rotate(0deg);
+    text-align:center;
+    line-height:1;
+    margin:0 0 14px;
+  }
+  .hook.ordered .hero-line{
+    position:static;
+    font-size:clamp(17px,2.2vw,20px);
+    transform:rotate(0deg);
+    text-align:center;
+    max-width:520px;
+    margin:0 auto;
+    line-height:1.5;
+  }
+  .hook.ordered .proof-strip-scatter{
+    display:none;
   }
   .tile-grid{
     position:relative;
@@ -136,10 +227,13 @@
     animation-delay:1.75s;
   }
   @media (prefers-reduced-motion: reduce){
-    .tile,.logo-reveal,.hero-name,.hero-line{
+    .tile,.logo-reveal,.hero-name,.hero-line, .proof-strip-scatter{
       animation:none !important;
       opacity:1 !important;
       transform:none !important;
+    }
+    .hero-name, .hero-line, .proof-strip-scatter{
+      transition:none !important;
     }
   }
 
@@ -148,6 +242,7 @@
   .proof-strip{
     background:var(--paper-warm);
     padding:22px 32px;
+    transform:skewY(-0.5deg);
   }
   .proof-strip ul{
     list-style:none;
@@ -168,11 +263,26 @@
     color:var(--cube-edge);
   }
 
-  /* ---------- work selector ---------- */
+  /* ---------- rhythm break ---------- */
+  .rhythm-break{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:40vh;
+    padding:80px 32px;
+    text-align:center;
+    font-family:var(--display);
+    font-size:clamp(32px,6vw,72px);
+    font-weight:500;
+    color:var(--ink-soft);
+    line-height:1.2;
+    transform:skewY(-0.5deg);
+  }
   .work-selector{
     max-width:1080px;
     margin:0 auto;
     padding:88px 32px 100px;
+    transform:skewY(0.5deg);
   }
   .section-label{
     font-family:var(--display);
@@ -235,8 +345,18 @@
 
   @media (max-width:760px){
     .card-grid{grid-template-columns:1fr;}
-    .hook{padding:64px 24px 56px;}
-    .work-selector{padding:64px 24px 72px;}
+    .hook{padding:32px 24px;}
+    .hook.scrambled .hero-name{
+      font-size:clamp(36px,10vw,60px);
+      left:-3%;
+    }
+    .hook.scrambled .hero-line{
+      font-size:12px;
+      right:8%;
+    }
+    .hook.ordered{padding:48px 24px 56px;}
+    .work-selector{padding:48px 24px 56px;}
+    .rhythm-break{padding:40px 24px;min-height:25vh;font-size:clamp(24px,5vw,48px);}
   }
 
   /* ---------- footer ---------- */
@@ -274,7 +394,7 @@
        logo unscrambling — faces start mismatched/rotated, then resolve
        into the aligned mark shown in assets/logo-cube.png. This tile
        grid is a structural stand-in until that animation is built. -->
-  <section class="hook" aria-label="Introduction">
+  <section class="hook scrambled" aria-label="Introduction">
     <div class="tile-grid">
       <div class="tile" style="left:6px;top:4px;transform:translate(-26px,-18px) rotate(-16deg);animation-delay:.02s"></div>
       <div class="tile accent" style="left:54px;top:4px;transform:translate(18px,-22px) rotate(13deg);animation-delay:.06s"></div>
@@ -290,8 +410,11 @@
       <div class="tile accent" style="left:78px;top:96px;transform:translate(-18px,12px) rotate(-9deg);animation-delay:.14s"></div>
       <div class="logo-reveal"><img src="assets/logo-cube.png" alt="Aditi Deshpande logo mark, a Rubik's cube reoriented so one face reads as a UI screen"></div>
     </div>
-    <span class="hero-name">Aditi Deshpande.</span>
-    <span class="hero-line">I unscramble software so it makes sense to the people using it.</span>
+    <div class="hero-wrapper">
+      <span class="hero-name">Aditi Deshpande.</span>
+      <span class="hero-line">I unscramble software so it makes sense to the people using it.</span>
+    </div>
+    <div class="proof-strip-scatter">10 years · 15 min → 10 sec · 2× Spot Award · M.Des, IISc</div>
   </section>
 
   <!-- PROOF STRIP -->
@@ -302,6 +425,11 @@
       <li>2&times; Spot Award</li>
       <li>M.Des, IISc</li>
     </ul>
+  </section>
+
+  <!-- RHYTHM BREAK -->
+  <section class="rhythm-break" aria-label="Transition">
+    Selected work
   </section>
 
   <!-- WORK SELECTOR -->
@@ -346,6 +474,46 @@
   <a href="https://www.linkedin.com/in/deshpandeaditi/">LinkedIn</a>
   <a href="assets/resume.pdf">Resume</a>
 </footer>
+
+<script>
+  // Unscramble animation: transition hook from scrambled to ordered state
+  (function(){
+    const hookEl = document.querySelector('.hook');
+    if(!hookEl) return;
+    
+    // Check if user prefers reduced motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    // If reduced motion, just show ordered state
+    if(prefersReducedMotion){
+      hookEl.classList.remove('scrambled');
+      hookEl.classList.add('ordered');
+      return;
+    }
+    
+    // Trigger transition after a brief delay or on first scroll
+    let transitioned = false;
+    
+    function unscramble(){
+      if(transitioned) return;
+      transitioned = true;
+      hookEl.classList.remove('scrambled');
+      hookEl.classList.add('ordered');
+    }
+    
+    // Listen for scroll to trigger unscramble
+    window.addEventListener('scroll', () => {
+      if(!transitioned && window.scrollY > 50){
+        unscramble();
+      }
+    }, { once: true });
+    
+    // Also trigger after 2 seconds if user hasn't scrolled
+    setTimeout(() => {
+      unscramble();
+    }, 2000);
+  })();
+</script>
 
 </body>
 </html>
