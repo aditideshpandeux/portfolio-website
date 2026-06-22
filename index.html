@@ -86,17 +86,16 @@
     background:var(--cube-face);
     border:1px solid var(--cube-edge);
     opacity:0;
-    animation:settle .85s cubic-bezier(.2,.8,.2,1) forwards, dissolve .7s ease-in .85s forwards;
+    animation:settle .85s cubic-bezier(.2,.8,.2,1) forwards, fadeout .5s ease .95s forwards;
   }
   .tile.accent{background:var(--accent-soft);border-color:var(--accent);}
   @keyframes settle{
     from{opacity:0;}
     to{opacity:1;transform:translate(0,0) rotate(0deg);}
   }
-  @keyframes dissolve{
-    0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1);}
-    50%{opacity:0.6;transform:translate(65px,35px) rotate(0deg) scale(0.7);}
-    100%{opacity:0;transform:translate(130px,70px) rotate(0deg) scale(0);}
+  @keyframes fadeout{
+    from{opacity:1;}
+    to{opacity:0;}
   }
   .logo-reveal{
     position:absolute;
@@ -105,8 +104,8 @@
     align-items:center;
     justify-content:center;
     opacity:0;
-    animation:fadein .8s ease-out forwards;
-    animation-delay:.8s;
+    animation:fadein .5s ease forwards;
+    animation-delay:.95s;
   }
   .logo-reveal img{width:64px;height:64px;}
   @keyframes fadein{
@@ -121,7 +120,7 @@
     margin:0 0 14px;
     opacity:0;
     animation:fadein .5s ease forwards;
-    animation-delay:1.6s;
+    animation-delay:1.5s;
   }
   .hero-line{
     display:block;
@@ -134,7 +133,7 @@
     line-height:1.5;
     opacity:0;
     animation:fadein .5s ease forwards;
-    animation-delay:1.85s;
+    animation-delay:1.75s;
   }
   @media (prefers-reduced-motion: reduce){
     .tile,.logo-reveal,.hero-name,.hero-line{
