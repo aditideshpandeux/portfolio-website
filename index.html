@@ -204,27 +204,16 @@
     to{opacity:1;transform:translateY(0);}
   }
   .hero-name{
-    display:block;
     font-family:var(--display);
     font-weight:700;
-    font-size:clamp(28px,4vw,40px);
-    margin:0 0 14px;
-    opacity:0;
-    animation:fadein .5s ease forwards;
-    animation-delay:1.5s;
+    margin:0;
   }
   .hero-line{
-    display:block;
     font-family:var(--body);
     font-weight:400;
-    font-size:clamp(17px,2.2vw,20px);
     color:var(--ink-soft);
-    max-width:520px;
-    margin:0 auto;
+    margin:0;
     line-height:1.5;
-    opacity:0;
-    animation:fadein .5s ease forwards;
-    animation-delay:1.75s;
   }
   @media (prefers-reduced-motion: reduce){
     .tile,.logo-reveal,.hero-name,.hero-line, .proof-strip-scatter{
@@ -434,7 +423,6 @@
 
   <!-- WORK SELECTOR -->
   <section class="work-selector" aria-label="Selected work">
-    <h2 class="section-label">Selected work</h2>
     <div class="card-grid">
 
       <a class="card" href="case-studies/fingerprinting.html">
@@ -508,10 +496,10 @@
       }
     }, { once: true });
     
-    // Also trigger after 2 seconds if user hasn't scrolled
+    // Also trigger after 3.5 seconds if user hasn't scrolled
     setTimeout(() => {
       unscramble();
-    }, 2000);
+    }, 3500);
   })();
 </script>
 
