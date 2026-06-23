@@ -53,10 +53,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 1080px;
     width: 100%;
-    margin: 0 auto;
-    padding: 28px 32px 0;
+    padding: 28px calc(6vw + 54px) 0;
     box-sizing: border-box;
   }
   .hook-header .mark span,
@@ -229,7 +227,7 @@
   /* ---------- responsive ---------- */
   @media (max-width: 600px) {
     .hook-header { padding: 20px 24px 0; }
-    .hero-inner { margin-left: 0; padding: 40px 24px 60px; }
+    .hero-inner { margin-left: 0; padding: 0 24px 60px; }
     .card-grid { grid-template-columns: 1fr; }
     .work-selector { padding: 48px 24px 56px; }
     .proof-strip { padding: 28px 24px; }
