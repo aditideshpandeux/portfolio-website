@@ -4,8 +4,414 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fingerprinting — Aditi Deshpande</title>
+<meta name="description" content="How Aditi turned a raw pattern-detection algorithm into a feature that replaces two months of manual process discovery.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@500;700&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  /* ---------- case study layout ---------- */
+  .cs-hero {
+    background: var(--paper-warm);
+    padding: 64px 32px 56px;
+  }
+  .cs-hero-inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .cs-eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 0.08em;
+    margin: 0 0 20px;
+  }
+  .cs-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1.05;
+    margin: 0 0 24px;
+    letter-spacing: -0.01em;
+  }
+  .cs-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .cs-meta li::before {
+    content: "— ";
+    color: var(--cube-edge);
+  }
+
+  /* ---------- body ---------- */
+  .cs-body {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 32px 96px;
+  }
+
+  /* TL;DR callout */
+  .tldr {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 20px 24px;
+    margin: 48px 0 0;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .tldr strong {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  /* section rhythm */
+  .cs-section {
+    margin-top: 56px;
+  }
+  .cs-section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 12px;
+  }
+  .cs-section h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(20px, 2.5vw, 26px);
+    margin: 0 0 16px;
+    line-height: 1.2;
+  }
+  .cs-section p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin: 0 0 16px;
+  }
+  .cs-section p:last-child { margin-bottom: 0; }
+
+  /* illustration */
+  .cs-illustration {
+    margin: 36px 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--paper-warm);
+  }
+  .cs-illustration img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .cs-illustration figcaption {
+    font-size: 13px;
+    color: var(--ink-soft);
+    padding: 12px 16px;
+    font-style: italic;
+  }
+
+  /* diagram container */
+  .diagram {
+    margin: 36px 0;
+    background: var(--paper-warm);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+  }
+  .diagram figcaption {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-align: center;
+    margin-top: 16px;
+    letter-spacing: 0.02em;
+  }
+
+  /* SVG shared styles */
+  .diagram svg {
+    display: block;
+    margin: 0 auto;
+    overflow: visible;
+  }
+
+  /* outcome markers */
+  .outcome-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    justify-content: center;
+  }
+  .outcome-legend span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* next case study */
+  .cs-next {
+    margin-top: 72px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .cs-next-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .cs-next-link {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--ink);
+    transition: color .15s ease;
+  }
+  .cs-next-link:hover { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    .cs-hero { padding: 48px 24px 40px; }
+    .cs-body { padding: 0 24px 64px; }
+    .cs-next { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+<!-- Google Analytics GA4 — replace YOUR_GA4_ID with your Measurement ID (format: G-XXXXXXXXXX) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA4_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "YOUR_GA4_ID");
+</script>
 </head>
 <body>
-<p>Fingerprinting case study — placeholder</p>
+
+<header class="site-header">
+  <div class="mark">
+    <a href="../index.html">
+      <img src="../assets/logo-cube.png" alt="Aditi Deshpande — home">
+    </a>
+    <span>Aditi Deshpande</span>
+  </div>
+  <nav>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../writing.html">Writing</a>
+  </nav>
+</header>
+
+<main>
+
+  <div class="cs-hero">
+    <div class="cs-hero-inner">
+      <p class="cs-eyebrow">Pegasystems · Process &amp; Task Mining</p>
+      <h1 class="cs-title">Fingerprinting</h1>
+      <ul class="cs-meta">
+        <li>Product design</li>
+        <li>2022–2023</li>
+        <li>Figma, Pega Studio</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cs-body">
+
+    <div class="tldr">
+      <strong>TL;DR</strong>
+      Process analysts used to spend close to two months manually piecing together how a department actually worked — tweak by tweak, person by person — before they could call it "the process." I turned a raw pattern-detection algorithm into a feature that does that in moments. Spot Award.
+    </div>
+
+    <section class="cs-section" aria-labelledby="context-heading">
+      <p class="cs-section-label">Context</p>
+      <h2 id="context-heading">A pattern-detection algorithm with no way to act on it</h2>
+      <p>The starting point was an algorithm out of Pega's Process &amp; Task Mining suite — it read screen-level activity data and flagged clusters of screens that looked like a task. That's all it did: groups of screens, no framing, no way for anyone to act on it.</p>
+      <p>Used by process analysts, ops managers, and sometimes department heads — anyone trying to understand how a department's workflow actually runs, versus how it's documented to run.</p>
+    </section>
+
+    <section class="cs-section" aria-labelledby="problem-heading">
+      <p class="cs-section-label">Problem</p>
+      <h2 id="problem-heading">Two months of manual work, every time</h2>
+
+      <figure class="cs-illustration">
+        <img
+          src="../assets/illustrations/fingerprinting-before.png"
+          alt="Illustration of a figure walking a winding path through towering, scattered browser-window panels and red-tabbed sticky notes — representing the manual two-month process discovery loop"
+        >
+        <figcaption>The manual process: talk to people, watch the work, reconcile individual variations into a shared pattern — repeated per department.</figcaption>
+      </figure>
+
+      <p>Understanding a department's real process meant manual reconstruction: talking to people, watching how work actually got done, noticing each person's individual tweak on the "official" process, then working out the broad pattern underneath all those variations.</p>
+      <p>For a sizeable department, that could take close to two months. One process analyst told me directly it saved his team weeks.</p>
+
+      <!-- Diagram 1: The manual loop -->
+      <figure class="diagram" aria-label="The manual process discovery loop">
+        <svg width="360" height="280" viewBox="0 0 360 280" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diag1-title">
+          <title id="diag1-title">Manual process discovery — four steps repeated per department</title>
+
+          <!-- Step boxes -->
+          <!-- Step 1 -->
+          <rect x="80" y="10" width="200" height="44" rx="8" fill="#DEDBD2" stroke="#B6B2A6" stroke-width="1"/>
+          <text x="180" y="28" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A" font-weight="500">Talk to people</text>
+          <text x="180" y="44" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#6B6963">How do you do this work?</text>
+
+          <!-- Arrow 1→2 -->
+          <line x1="180" y1="54" x2="180" y2="76" stroke="#B6B2A6" stroke-width="1.5"/>
+          <polygon points="174,72 180,82 186,72" fill="#B6B2A6"/>
+
+          <!-- Step 2 -->
+          <rect x="80" y="82" width="200" height="44" rx="8" fill="#DEDBD2" stroke="#B6B2A6" stroke-width="1"/>
+          <text x="180" y="100" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A" font-weight="500">Watch the work happen</text>
+          <text x="180" y="116" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#6B6963">See the real routine</text>
+
+          <!-- Arrow 2→3 -->
+          <line x1="180" y1="126" x2="180" y2="148" stroke="#B6B2A6" stroke-width="1.5"/>
+          <polygon points="174,144 180,154 186,144" fill="#B6B2A6"/>
+
+          <!-- Step 3 -->
+          <rect x="80" y="154" width="200" height="44" rx="8" fill="#DEDBD2" stroke="#B6B2A6" stroke-width="1"/>
+          <text x="180" y="172" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A" font-weight="500">Spot individual tweaks</text>
+          <text x="180" y="188" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#6B6963">Everyone does it differently</text>
+
+          <!-- Arrow 3→4 -->
+          <line x1="180" y1="198" x2="180" y2="220" stroke="#B6B2A6" stroke-width="1.5"/>
+          <polygon points="174,216 180,226 186,216" fill="#B6B2A6"/>
+
+          <!-- Step 4 -->
+          <rect x="80" y="226" width="200" height="44" rx="8" fill="#DEDBD2" stroke="#B6B2A6" stroke-width="1"/>
+          <text x="180" y="244" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A" font-weight="500">Guess the shared pattern</text>
+          <text x="180" y="260" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#6B6963">Piece it into one process</text>
+        </svg>
+        <figcaption>Repeats per department — close to two months each</figcaption>
+      </figure>
+    </section>
+
+    <section class="cs-section" aria-labelledby="process-heading">
+      <p class="cs-section-label">Process</p>
+      <h2 id="process-heading">From raw output to something an analyst would trust</h2>
+      <p>I was handed the algorithm's raw output — clusters of screens it flagged as a likely task, nothing else. The real design problem was turning that into something a process analyst would actually trust and act on: what to surface, how to frame a detected pattern, how much of the algorithm's reasoning to show versus hide.</p>
+      <p>I worked closely with the product manager and the architect who held the patent on the algorithm — brought designs to them, took feedback, iterated. The design team's reviews shaped a lot of the refinement too.</p>
+      <p>The core tension: show too little and the analyst can't judge whether to trust the suggestion. Show too much and the algorithm's complexity becomes their problem to manage. Progressive disclosure was the answer — surface the suggestion cleanly, let the detail unfold only when they ask for it.</p>
+    </section>
+
+    <section class="cs-section" aria-labelledby="solution-heading">
+      <p class="cs-section-label">Solution</p>
+      <h2 id="solution-heading">Raw output → one clear suggestion</h2>
+      <p>Before: a tangle of individual habits and workarounds across a whole department, manually cross-referenced by hand. After: the algorithm's output surfaced as a single, clear suggestion — ranked, in plain language, with reasoning available on request.</p>
+
+      <!-- Diagram 2: The design move -->
+      <figure class="diagram" aria-label="The design move — from raw algorithm output to usable suggestion">
+        <svg width="360" height="294" viewBox="0 0 360 294" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diag2-title">
+          <title id="diag2-title">Four steps from raw algorithm output to confirmed workflow suggestion</title>
+
+          <!-- Step 1 — neutral/structural (the algorithm's domain) -->
+          <rect x="60" y="10" width="240" height="50" rx="8" fill="#F1EEE6" stroke="#DAD7CD" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <text x="180" y="30" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#6B6963" font-weight="500">Raw algorithm output</text>
+          <text x="180" y="48" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#B6B2A6">Clusters of screens, unlabeled</text>
+
+          <!-- Arrow 1→2 -->
+          <line x1="180" y1="60" x2="180" y2="82" stroke="#B6B2A6" stroke-width="1.5"/>
+          <polygon points="174,78 180,88 186,78" fill="#B6B2A6"/>
+
+          <!-- Step 2 — designed layer -->
+          <rect x="60" y="88" width="240" height="50" rx="8" fill="#F3E3DD" stroke="#C1391D" stroke-width="1.5"/>
+          <text x="180" y="108" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A" font-weight="500">Suggested workflows list</text>
+          <text x="180" y="126" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#6B6963">Ranked, plain language</text>
+
+          <!-- Arrow 2→3 -->
+          <line x1="180" y1="138" x2="180" y2="160" stroke="#C1391D" stroke-width="1.5"/>
+          <polygon points="174,156 180,166 186,156" fill="#C1391D"/>
+
+          <!-- Step 3 — designed layer -->
+          <rect x="60" y="166" width="240" height="50" rx="8" fill="#F3E3DD" stroke="#C1391D" stroke-width="1.5"/>
+          <text x="180" y="186" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A" font-weight="500">Expand one workflow</text>
+          <text x="180" y="204" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#6B6963">See why it was flagged</text>
+
+          <!-- Arrow 3→4 -->
+          <line x1="180" y1="216" x2="180" y2="238" stroke="#C1391D" stroke-width="1.5"/>
+          <polygon points="174,234 180,244 186,234" fill="#C1391D"/>
+
+          <!-- Step 4 — designed layer, accent-filled -->
+          <rect x="60" y="244" width="240" height="50" rx="8" fill="#C1391D" stroke="#C1391D" stroke-width="1.5"/>
+          <text x="180" y="264" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#fff" font-weight="500">Confirm or dismiss</text>
+          <text x="180" y="282" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="rgba(255,255,255,0.75)">Narrows to the one that fits</text>
+        </svg>
+        <figcaption>Progressive disclosure — detail unfolds only when asked for</figcaption>
+      </figure>
+    </section>
+
+    <section class="cs-section" aria-labelledby="outcome-heading">
+      <p class="cs-section-label">Outcome</p>
+      <h2 id="outcome-heading">Tested with 6 analysts. Spot Award.</h2>
+      <p>Tested directly with 6 client-side process and senior analysts — each given the prototype and asked to complete tasks on their own, no guidance. From first concept to VP buy-in to client testing permission to running the sessions: about 2.5 months.</p>
+      <p>One participant didn't complete — a call-center analyst evaluating a tool built for process analysts. Different role, different mental model. That's noted plainly here rather than excluded from the count.</p>
+
+      <!-- Diagram 3: Usability outcome -->
+      <figure class="diagram" aria-label="Usability test results — 6 participants">
+        <svg width="300" height="56" viewBox="0 0 300 56" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diag3-title">
+          <title id="diag3-title">Six usability test participants: four completed without prompting, one needed a nudge, one didn't finish</title>
+
+          <!-- 4 completed (solid fill) -->
+          <circle cx="26"  cy="24" r="18" fill="#C1391D"/>
+          <circle cx="76"  cy="24" r="18" fill="#C1391D"/>
+          <circle cx="126" cy="24" r="18" fill="#C1391D"/>
+          <circle cx="176" cy="24" r="18" fill="#C1391D"/>
+
+          <!-- 1 nudge (ring, accent) -->
+          <circle cx="226" cy="24" r="16" fill="none" stroke="#C1391D" stroke-width="3"/>
+
+          <!-- 1 didn't finish (muted ring) -->
+          <circle cx="276" cy="24" r="16" fill="none" stroke="#DAD7CD" stroke-width="2"/>
+        </svg>
+
+        <div class="outcome-legend">
+          <span><span class="legend-dot" style="background:#C1391D"></span>4 of 6 completed without prompting</span>
+          <span><span class="legend-dot" style="background:none;border:2.5px solid #C1391D;box-sizing:border-box"></span>1 needed a small nudge</span>
+          <span><span class="legend-dot" style="background:none;border:2px solid #DAD7CD;box-sizing:border-box"></span>1 didn't finish — different role</span>
+        </div>
+        <figcaption>The sixth participant was a call-center analyst, not a process analyst — the primary user this feature was designed for.</figcaption>
+      </figure>
+
+      <p>Spot Award. One process analyst told me directly it saved his team weeks.</p>
+    </section>
+
+    <nav class="cs-next" aria-label="Next case study">
+      <span class="cs-next-label">Next</span>
+      <a class="cs-next-link" href="unified-authorization.html">Unified authorization &rarr;</a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <a href="mailto:aditideshpandeux@gmail.com">Email</a>
+  <a href="https://www.linkedin.com/in/deshpandeaditi/">LinkedIn</a>
+  <a href="../assets/resume.pdf">Resume</a>
+</footer>
+
 </body>
 </html>

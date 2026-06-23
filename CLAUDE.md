@@ -216,37 +216,93 @@ Caption below: "progressive disclosure: detail unfolds only when asked for"
 - 1 needed a small nudge
 - 1 didn't finish — different role focus (a call-center participant evaluating a tool built for process analysts — note this plainly in the case study text, don't gloss over it)
 
-**ABAC+RBAC — before/after comparison:** two-column layout.
-Left ("before — four separate paths"): four disconnected boxes, slightly offset/rotated to suggest disorder, no connecting arrows: Build case type / RBAC settings / ABAC settings / Persona (auth profile). Caption: "configured separately, held in memory by the user."
-Right ("after — one authoring flow"): the same four items, but RBAC settings + ABAC settings merged into one box, all aligned vertically and connected by arrows, enclosed in a single dashed outline labeled "one authoring flow." Caption: "one flow, nothing to hold in memory."
+**Unified Authorization — before/after (v2, replaces earlier simplified version, supersedes the separate "workflow blend" diagram entirely — this pair now covers that ground too, no third diagram needed):**
 
-**ABAC+RBAC — the workflow blend:** still needs to be built (referenced by Aditi as "a diagram showing how authorization was blended naturally into workflow authoring" — distinct from the before/after comparison above, more about the seamless single journey than the contrast). Not yet finalized — build this with Aditi before finalizing the ABAC+RBAC page.
+*Before — LOCKED, the disjointed journey version (replaces the earlier static scattered version, which is no longer used):* five separate pieces (Case type, Permissions, Access role, Access groups, Conditional access/ABAC), scattered and slightly rotated to suggest disorder, connected by 5 dashed arrows in a deliberately non-sequential, crossing pattern — each arrow goes to a non-adjacent box, so the lines cross each other multiple times, showing a tangled path rather than one clean route. This is richer than a static "things sit separately" diagram — it shows the lived experience of hopping between them, not just where they live. Caption: "one task, five places to visit — none of them line up."
 
-## Homepage layout — drama direction (LOCKED)
+Pieces, for reference:
+1. Case type
+2. Permissions
+3. Access role (permissions get attached here)
+4. Access groups (access role gets attached here)
+5. Conditional access (ABAC) — built entirely separately
 
-The initial homepage build was structurally flat — everything centered, uniform spacing, no shift in rhythm or scale between sections. Aditi found this boring. The fix is NOT more animation layered on top — it's structural: asymmetry, scale contrast, and the unscramble concept expressed at the layout level, not just in one small graphic.
+*After:* one outer dashed container labeled "building a case type — one flow," containing three connected steps inside the same container:
+1. Define the case — subtitle: "the basic unit of work" (case type is the unit of thinking for large applications)
+2. Author permissions — subtitle: "and conditional access, inline" (ABAC/conditional access happens as part of the same authoring step, no separate process)
+3. Access role & groups — subtitle: "assembled automatically"
+Below the container, two checkmark callout lines:
+- "✓ advanced users can still configure any piece on its own" (flexibility is preserved, not removed — this is about removing forced separation, not removing options)
+- "✓ one view shows everything configured for access" (no jumping between rules to understand what's been set up)
 
-**Reference points discussed** (structural cues only, not visual copies):
-- lolajiang.com — case studies are password-gated (an "exclusive access" framing), each project leads with one punchy line before a full-bleed image, minimal nav, no throat-clearing.
-- kudos.framer.media — bold agency energy, numbered indices, big stat counters, heavy motion. Too much for this site's content volume (2 case studies) — borrow the confidence, not the density.
+**Build note — line/arrow visibility:** for any free-floating connecting line or arrow (not a box border), use an explicit, sufficiently dark stroke color (e.g. equivalent to --ink-soft or darker, not --line-soft or --cube-edge) — the lighter border-tone grays used for box outlines are too subtle and can disappear against the cream background when used for a standalone line. This came up directly while testing Version B above.
 
-**Locked direction for the homepage specifically** (case study pages stay calm — see below, this drama is homepage-only):
+This is the most NDA-safe version of the story Aditi can tell — it describes the structural shift (5 disjointed pieces → 1 authored flow with automatic assembly) without revealing any actual screen design.
 
-1. **The opening viewport starts genuinely scrambled, structurally — not just a small tile graphic.** Name, thesis line, and proof-strip numbers all scattered at different sizes/rotations/positions across the full screen on load. After a beat (or on first scroll), everything snaps into the calm, aligned layout that holds for the rest of the page. This is the unscramble concept expressed as the actual layout, not a decoration sitting on top of a normal layout.
+## Homepage layout — drama direction (LOCKED v2 — supersedes earlier scramble/skew version below)
 
-2. **Real asymmetry — break the center-everything habit.** Name pushed hard to one side, oversized, allowed to bleed off the screen edge. Thesis line small and quiet, positioned elsewhere, not directly centered under the name. Big contrast in scale and position between the two elements, not matching sizes both centered.
+The initial homepage build was structurally flat — everything centered, uniform spacing, no shift in rhythm or scale between sections. An earlier round of this section called for a scattered scramble animation and skewed 3D panels (see superseded notes at the bottom of this section, kept for context only) — that direction is now replaced by the sharper version below, after reviewing actual screenshots of two reference sites. **Build this version, not the scramble/skew one.**
 
-3. **The cube's geometry as a structural device, not just a logo.** Section backgrounds carry a very slight skew/rotation (a few degrees, subtle) suggesting adjacent cube facets as the user scrolls past — not uniform flat rectangular sections stacked straight down.
+**Reference sites — specific visual moves being borrowed (structural inspiration only, not visual copies):**
+- lolajiang.com: a soft atmospheric color wash behind the hero (gradient, not flat color); hero text positioned off-center (not centered horizontally or vertically) with a thin vertical accent line beside the text block instead of a border or box; generous negative space; case study visuals sit in a soft rounded card offset beside text, not full-bleed under it.
+- kudos.framer.media: faint dotted grid lines running down the page as a structural decorative device; a massive ghosted/watermark-scale wordmark used once as a transition layer between two sections (not as content, not repeated); small monospace "eyebrow" labels before section headers; only part of a headline colored with the accent, not the whole line; hard alternation between two background tones as the pacing device between sections.
 
-4. **Rhythm breaks between sections.** Avoid uniform spacing/size throughout. Tight, dense proof-strip typography should be followed by something sparse and large (e.g. one big word or short phrase taking most of the viewport) before the work selector — tension and release, not a steady uniform scroll.
+**Locked direction for the homepage (homepage only — case study pages stay calm, see below):**
 
-5. **The NDA framing becomes a deliberate feature, not an apology.** Borrowing from Lola Jiang's password-gated case study framing: present the "real screens are NDA-protected, here's the thinking instead" moment as a confident, deliberate choice (rarer access, not absence) — matches the tone already locked for the Adobe Portfolio placeholder line ("This site has officially reached legacy status...").
+1. **Atmospheric wash behind the hero only.** A soft gradient using the existing cream background fading very subtly into a low-opacity vermillion blush (not a flat color, not full accent strength) — replaces the earlier "scrambled tiles" hook entirely. Quieter and more sophisticated, and less likely to read as a generic AI-generated effect.
+2. **Off-center hero text.** Name + thesis line positioned off-center (not centered horizontally or vertically in the viewport), with a thin vertical line (1px, --line-soft or accent color) beside the text block. Generous whitespace around it.
+3. **One oversized ghosted wordmark or cube glyph as a single section transition.** Used once, between the hero and the work selector (or wherever it reads best) — not repeated, not used as a background texture everywhere.
+4. **Faint dotted grid lines running down the page**, full height, low opacity — a structural decorative device, not functional grid content.
+5. **Alternating background tone between sections** (cream / a slightly warmer or darker panel tone from the existing palette) as the primary rhythm-break device — replaces the earlier "skewed 3D panels" idea, much more reliable to build cleanly and closer to what was actually liked in the references.
+6. **Color only one word within the thesis line** in vermillion, not the full sentence — small, cheap, effective contrast move.
+7. **Small monospace "eyebrow" label above section headers** (e.g. "+ selected work" above the work selector) for editorial rhythm — optional, low-cost addition if time allows.
 
-**What does NOT change:** case study pages stay simple, calm, and content-dense — finesse of information architecture and a few well-chosen colors from the established palette (vermillion accent, warm cream/gray), not drama. The drama is homepage-only; case studies are where the actual proof lives and shouldn't compete for attention with the page itself.
+**What does NOT change:** case study pages stay simple, calm, and content-dense — finesse of information architecture and a few well-chosen colors from the established palette, not drama. The drama is homepage-only.
+
+**Superseded — do not build:** the original version of this section called for (a) the opening viewport starting genuinely scrambled with name/thesis/proof-strip scattered at random sizes/rotations before snapping into place, and (b) section backgrounds carrying a slight 3D skew suggesting cube facets. Both are replaced by points 1–7 above. Kept here only so Claude Code doesn't reintroduce them from earlier context.
 
 ## Process note for this build
 
-Decisions, brainstorming, and visual prototypes happen in chat with Claude (claude.ai) first — fast iteration, see-before-you-commit. The actual project (real files, git, Netlify deploy) lives in VSCode with Claude Code. Prototypes built in chat are starting references to hand off and integrate, not a parallel version of the site — avoid letting two versions diverge.
+Clear division of labor, as of this point in the project:
+- **Content, copy, and diagrams** — decided and built in chat with Claude (claude.ai). This includes case study text, hero/proof-strip copy, structural diagrams, illustration prompts/critique, naming decisions.
+- **Layout, color, and other visual styling** — implemented directly in VSCode with Claude Code. This includes CSS, page structure, responsive behavior, color palette changes, animation/motion implementation.
+
+Either way, any decision that should persist gets written into this file. If a layout/color decision made in VSCode should be known going forward (e.g. a palette change, a new component pattern), bring it back here so this file stays the single source of truth — don't let decisions live only in one place or the other.
+
+## Homepage work selector — FINAL lineup (LOCKED)
+
+Down to two case studies only, per the 2-day deadline decision — Cloud Secret Sync and OCPM are fully removed from the homepage selector (not just deprioritized in the backlog, actually removed from the `.card-grid`). Grid should be 2 columns, not 3, when there are only 2 cards — adjust `.card-grid` accordingly (3-column grid with 2 items looks unbalanced/incomplete).
+
+1. **Fingerprinting** — outcome line: "Manual discovery → instant suggestions" — `href="case-studies/fingerprinting.html"`
+2. **Unified authorization** (final title for the ABAC+RBAC case study — "ABAC+RBAC" is internal jargon, not used anywhere in visible copy) — outcome line: "Two access models, combined into one" — `href="case-studies/unified-authorization.html"`
+
+## Build-quality note: extract shared design tokens
+
+The current `index.html` has all design tokens (`--accent`, `--paper`, `--ink`, etc.) and base styles embedded in its own `<style>` block. Before building case study pages, extract the shared `:root` tokens, base resets, and any reusable classes (`.card`, `a:focus-visible`, etc.) into a shared stylesheet (e.g. `assets/styles.css`), linked from every page. Page-specific styles (hero layout, case-study-specific layout) can stay in a per-page `<style>` block or a second linked file. Avoids drift between pages as the site grows past two.
+
+## Fingerprinting illustration — in use
+
+One ChatGPT-generated illustration was approved: a figure walking a winding, footprint-marked path through towering, scattered browser-window panels and red-tabbed sticky notes, looking down, small relative to the clutter. This maps directly to the "Fingerprinting — before" slot (the two-month manual loop) — use this image there. The "Fingerprinting — the design move" image (funnel of shapes resolving into one glowing accent-colored rectangle) was also approved as usable, can go in that slot if Aditi confirms, or be sharpened further on request.
+
+ABAC+RBAC illustrations (before/after/workflow-blend) were not approved — the generated versions were too generic/symmetric (flat unrelated shapes, no accent color, no sense of motion or convergence). Revised prompts were written emphasizing asymmetry, traceable before/after fragments, and accent color presence — but no final images exist yet. Build the Unified Authorization case study using the locked structural diagrams only for now; illustrations can be added later without restructuring the page.
+
+## Illustration generation — style anchor and lessons learned
+
+Illustrations are generated externally via ChatGPT, not by Claude/Claude Code. If asked to help refine prompts for future illustrations (e.g. for Unified Authorization, or future case studies), use this anchor and these lessons.
+
+**Style anchor — paste before every illustration prompt:**
+> Flat, minimalist editorial illustration. Warm cream background (#FAFAF8). One accent color: a deep vermillion red (#C1391D). Supporting tones in muted warm gray. Clean geometric shapes, no gradients, no photorealism, no text or labels anywhere in the image, no real software UI of any kind.
+
+**Lessons learned from reviewing generated images:**
+- **Specificity beats a vague style description.** A prompt describing the *exact scene* (e.g. "a figure walking a winding, footprint-marked path through towering, scattered browser-window panels and red-tabbed sticky notes, looking down, small relative to the clutter") produces something genuinely specific to the story. A vague prompt ("a person navigating complexity") produces generic stock-illustration output even with the same style anchor attached.
+- **Asymmetry reads as process; symmetry reads as decoration.** A perfectly symmetric arrangement (e.g. a 6-way mandala/hexagon) looks like a static logo or pattern, not "two things resolving into one." Asymmetric, slightly imperfect compositions read as something actively happening.
+- **The accent color must be present and meaningful, not absent.** A generated image with zero vermillion anywhere doesn't feel like it belongs to this brand, no matter how well it matches the style anchor's described palette.
+- **Before/after pairs need traceable continuity.** If two images are meant to be a before/after pair (e.g. ABAC+RBAC before/after), the same elements (same four fragments, same shapes) should be visibly present in both, just rearranged/resolved — not two unrelated compositions that happen to share a color palette.
+
+**Status of illustrations as of this point:**
+- Fingerprinting — before (the manual loop): APPROVED, in use (see "Fingerprinting illustration — in use" above)
+- Fingerprinting — the design move (funnel resolving to one glowing rectangle): approved as usable, not yet confirmed for final placement
+- ABAC+RBAC (Unified Authorization) — before/after/workflow blend: NOT approved, regenerate using the lessons above. First attempts were too generic/symmetric/missing accent color.
 
 ## Open items / decisions still pending
 

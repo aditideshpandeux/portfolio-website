@@ -7,357 +7,239 @@
 <meta name="description" content="Aditi Deshpande. I unscramble software so it makes sense to the people using it. Senior product designer, 10 years.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@500;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@500;700&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
 <style>
-  /* ============================================
-     DESIGN TOKENS
-     Palette pulled from the actual cube logo:
-     paper (background), ink (text), and a single
-     vermillion accent used sparingly — same red
-     family already used in Aditi's resume work,
-     for brand consistency across application materials.
-     No rule lines as separators anywhere on this page —
-     spacing, color, and type carry structure instead.
-     ============================================ */
-  :root{
-    --paper: #FAFAF8;
-    --paper-warm: #F1EEE6;
-    --ink: #1C1C1A;
-    --ink-soft: #6B6963;
-    --line-soft: #DAD7CD;
-    --accent: #C1391D;
-    --accent-soft: #F3E3DD;
-    --cube-face: #DEDBD2;
-    --cube-edge: #B6B2A6;
-    --radius: 14px;
-    --display: "Abhaya Libre", serif;
-    --body: "DM Sans", sans-serif;
-  }
+  /* Homepage-specific layout only */
 
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:var(--paper);
-    color:var(--ink);
-    font-family:var(--body);
-    -webkit-font-smoothing:antialiased;
+  /* dotted grid device running full page height */
+  body {
+    background-image:
+      radial-gradient(circle, var(--line-soft) 1px, transparent 1px),
+      radial-gradient(circle, var(--line-soft) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: 0 0, 16px 16px;
+    position: relative;
   }
-  a{color:inherit;text-decoration:none;}
-  a:focus-visible, button:focus-visible{
-    outline:2px solid var(--accent);
-    outline-offset:3px;
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: var(--paper);
+    opacity: 0.72;
+    pointer-events: none;
+    z-index: 0;
   }
+  header, main, footer { position: relative; z-index: 1; }
 
-  /* ---------- header ---------- */
-  .site-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    max-width:1080px;
-    margin:0 auto;
-    padding:28px 32px 0;
+  /* ---------- hero ---------- */
+  .hook {
+    position: relative;
+    min-height: min(92vh, 700px);
+    display: flex;
+    align-items: flex-end;
+    padding: 0 32px 80px;
+    overflow: hidden;
   }
-  .mark{display:flex;align-items:center;gap:10px;}
-  .mark img{width:28px;height:28px;display:block;}
-  .mark span{font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:0.01em;}
-  nav{display:flex;gap:28px;font-size:14px;color:var(--ink-soft);}
-  nav a{transition:color .15s ease;}
-  nav a:hover{color:var(--ink);}
-
-  /* ---------- hook + thesis ---------- */
-  .hook{
-    position:relative;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    justify-content:center;
-    padding:0 32px;
-    overflow:hidden;
+  /* atmospheric gradient wash — hero only */
+  .hook::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 30% 40%, rgba(193,57,29,0.07) 0%, transparent 70%),
+      linear-gradient(160deg, rgba(193,57,29,0.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
   }
-  .hook.scrambled .hero-wrapper{
-    position:absolute;
-    inset:0;
-    pointer-events:none;
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    max-width: 680px;
+    margin-left: 6vw;
   }
-  .hook.scrambled .tile-grid{
-    position:absolute;
-    width:100%;
-    height:100%;
-    inset:0;
-    margin:0;
+  .hero-rule {
+    flex-shrink: 0;
+    width: 2px;
+    background: var(--accent);
+    opacity: 1;
+    margin-right: 20px;
+    align-self: stretch;
+    margin-top: 4px;
   }
-  .hook.ordered{
-    min-height:auto;
-    align-items:center;
-    padding:96px 32px 72px;
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
   }
-  .hook.ordered .hero-wrapper{
-    width:100%;
-    text-align:center;
-    display:block;
+  .hero-name {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(32px, 4.5vw, 52px);
+    line-height: 1.05;
+    margin: 0;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    animation: rise .65s cubic-bezier(.25,.46,.45,.94) .1s forwards;
   }
-  .hook.ordered .hero-name{
-    display:block;
-    position:static;
-    font-size:clamp(28px,4vw,40px);
-    transform:rotate(0deg);
-    text-align:center;
-    line-height:1;
-    margin:0 0 14px;
+  .hero-line {
+    font-family: var(--body);
+    font-weight: 400;
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--ink-soft);
+    margin: 0;
+    line-height: 1.55;
+    max-width: 500px;
+    opacity: 0;
+    animation: rise .65s cubic-bezier(.25,.46,.45,.94) .35s forwards;
   }
-  .hook.ordered .hero-line{
-    display:block;
-    position:static;
-    font-size:clamp(17px,2.2vw,20px);
-    transform:rotate(0deg);
-    text-align:center;
-    max-width:520px;
-    margin:0 auto;
-    line-height:1.5;
+  .hero-line .accent-word {
+    color: var(--accent);
+    font-weight: 500;
   }
-  
-  /* Asymmetric positioning in scrambled state */
-  .hook.scrambled .hero-name{
-    position:absolute;
-    top:15%;
-    left:-5%;
-    font-size:clamp(48px,12vw,100px);
-    max-width:120%;
-    text-align:left;
-    line-height:0.9;
-    transform:rotate(-3deg);
-    margin:0;
-    animation:none !important;
-    opacity:1 !important;
-  }
-  .hook.scrambled .hero-line{
-    position:absolute;
-    bottom:20%;
-    right:5%;
-    font-size:14px;
-    max-width:280px;
-    text-align:left;
-    transform:rotate(2deg);
-    margin:0;
-    animation:none !important;
-    opacity:1 !important;
-  }
-  .hook.scrambled .proof-strip-scatter{
-    position:absolute;
-    bottom:35%;
-    left:10%;
-    font-size:11px;
-    transform:rotate(-2deg);
-    opacity:1 !important;
-  }
-  
-  /* Transition effect */
-  .hero-name, .hero-line, .proof-strip-scatter{
-    transition:all .8s cubic-bezier(.25,.46,.45,.94);
-  }
-  .hook.ordered .proof-strip-scatter{
-    display:none;
-  }
-  .tile-grid{
-    position:relative;
-    width:260px;
-    height:140px;
-    margin:0 auto 44px;
-  }
-  .tile{
-    position:absolute;
-    width:36px;
-    height:36px;
-    border-radius:8px;
-    background:var(--cube-face);
-    border:1px solid var(--cube-edge);
-    opacity:0;
-    animation:settle .85s cubic-bezier(.2,.8,.2,1) forwards, fadeout .5s ease .95s forwards;
-  }
-  .tile.accent{background:var(--accent-soft);border-color:var(--accent);}
-  @keyframes settle{
-    from{opacity:0;}
-    to{opacity:1;transform:translate(0,0) rotate(0deg);}
-  }
-  @keyframes fadeout{
-    from{opacity:1;}
-    to{opacity:0;}
-  }
-  .logo-reveal{
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    opacity:0;
-    animation:fadein .5s ease forwards;
-    animation-delay:.95s;
-  }
-  .logo-reveal img{width:64px;height:64px;}
-  @keyframes fadein{
-    from{opacity:0;transform:translateY(6px);}
-    to{opacity:1;transform:translateY(0);}
-  }
-  .hero-name{
-    font-family:var(--display);
-    font-weight:700;
-    margin:0;
-  }
-  .hero-line{
-    font-family:var(--body);
-    font-weight:400;
-    color:var(--ink-soft);
-    margin:0;
-    line-height:1.5;
-  }
-  @media (prefers-reduced-motion: reduce){
-    .tile,.logo-reveal,.hero-name,.hero-line, .proof-strip-scatter{
-      animation:none !important;
-      opacity:1 !important;
-      transform:none !important;
-    }
-    .hero-name, .hero-line, .proof-strip-scatter{
-      transition:none !important;
-    }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   /* ---------- proof strip ---------- */
-  /* a tinted band instead of a rule line — structure via color, not borders */
-  .proof-strip{
-    background:var(--paper-warm);
-    padding:22px 32px;
-    transform:skewY(-0.5deg);
+  .proof-strip {
+    background: var(--paper-warm);
+    padding: 22px 32px;
+    position: relative;
+    z-index: 1;
   }
-  .proof-strip ul{
-    list-style:none;
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:10px 18px;
-    max-width:720px;
-    margin:0 auto;
-    padding:0;
-    font-size:14px;
-    color:var(--ink-soft);
+  .proof-strip ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 18px;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0;
+    font-size: 14px;
+    color: var(--ink-soft);
   }
-  .proof-strip li{display:flex;align-items:center;gap:18px;}
-  .proof-strip li:not(:last-child)::after{
-    content:"·";
-    margin-left:18px;
-    color:var(--cube-edge);
-  }
-
-  /* ---------- rhythm break ---------- */
-  .rhythm-break{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:40vh;
-    padding:80px 32px;
-    text-align:center;
-    font-family:var(--display);
-    font-size:clamp(32px,6vw,72px);
-    font-weight:500;
-    color:var(--ink-soft);
-    line-height:1.2;
-    transform:skewY(-0.5deg);
-  }
-  .work-selector{
-    max-width:1080px;
-    margin:0 auto;
-    padding:88px 32px 100px;
-    transform:skewY(0.5deg);
-  }
-  .section-label{
-    font-family:var(--display);
-    font-weight:500;
-    font-size:22px;
-    margin:0 0 36px;
-    text-align:center;
-  }
-  .card-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:20px;
-  }
-  .card{
-    position:relative;
-    display:block;
-    background:#fff;
-    border:1px solid var(--line-soft);
-    border-radius:var(--radius);
-    padding:22px 22px 26px;
-    overflow:hidden;
-    transition:border-color .2s ease, box-shadow .2s ease;
-  }
-  .card:hover{
-    border-color:var(--accent);
-    box-shadow:0 6px 18px rgba(28,28,26,0.06);
-  }
-  .shard{
-    position:absolute;
-    width:10px;
-    height:10px;
-    border-radius:2px;
-    background:var(--cube-edge);
-    transition:transform .35s ease;
-  }
-  .card:hover .shard{transform:translate(0,0) rotate(0deg) !important;}
-  .card-title{
-    font-family:var(--display);
-    font-weight:700;
-    font-size:18px;
-    margin:8px 0 6px;
-  }
-  .card-outcome{
-    font-size:14px;
-    color:var(--ink-soft);
-    margin:0 0 18px;
-    line-height:1.5;
-  }
-  .card-open{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    font-size:13px;
-    color:var(--accent);
-    opacity:0;
-    transform:translateX(-4px);
-    transition:opacity .2s ease, transform .2s ease;
-  }
-  .card:hover .card-open{opacity:1;transform:translateX(0);}
-
-  @media (max-width:760px){
-    .card-grid{grid-template-columns:1fr;}
-    .hook{padding:32px 24px;}
-    .hook.scrambled .hero-name{
-      font-size:clamp(36px,10vw,60px);
-      left:-3%;
-    }
-    .hook.scrambled .hero-line{
-      font-size:12px;
-      right:8%;
-    }
-    .hook.ordered{padding:48px 24px 56px;}
-    .work-selector{padding:48px 24px 56px;}
-    .rhythm-break{padding:40px 24px;min-height:25vh;font-size:clamp(24px,5vw,48px);}
+  .proof-strip li { display: flex; align-items: center; gap: 18px; }
+  .proof-strip li:not(:last-child)::after {
+    content: "·";
+    margin-left: 18px;
+    color: var(--cube-edge);
   }
 
-  /* ---------- footer ---------- */
-  footer{
-    max-width:1080px;
-    margin:0 auto;
-    padding:40px 32px 64px;
-    display:flex;
-    justify-content:center;
-    gap:24px;
-    font-size:14px;
-    color:var(--ink-soft);
+  /* ---------- ghosted logo divider (used once) ---------- */
+  .wordmark-divider {
+    position: relative;
+    overflow: hidden;
+    height: 140px;
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 40px;
   }
-  footer a:hover{color:var(--accent);}
+  .wordmark-ghost {
+    width: clamp(80px, 14vw, 160px);
+    height: auto;
+    opacity: 0.15;
+    margin-right: -2vw;
+  }
+
+  /* ---------- work selector ---------- */
+  .work-selector {
+    background: var(--paper-warm);
+    padding: 72px 32px 96px;
+  }
+  .work-selector-inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .section-eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 0.08em;
+    text-transform: lowercase;
+    margin: 0 0 12px;
+  }
+  .section-label {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 22px;
+    margin: 0 0 40px;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .card {
+    position: relative;
+    display: block;
+    background: #fff;
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius);
+    padding: 22px 22px 26px;
+    overflow: hidden;
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 6px 18px rgba(28,28,26,0.06);
+  }
+  .shard {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--cube-edge);
+    transition: transform .35s ease;
+  }
+  .card:hover .shard { transform: translate(0,0) rotate(0deg) !important; }
+  .card-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 18px;
+    margin: 8px 0 6px;
+  }
+  .card-outcome {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 0 0 18px;
+    line-height: 1.5;
+  }
+  .card-open {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--accent);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .card:hover .card-open { opacity: 1; transform: translateX(0); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 600px) {
+    .hook { padding: 0 24px 60px; }
+    .hero-inner { margin-left: 0; }
+    .card-grid { grid-template-columns: 1fr; }
+    .work-selector { padding: 48px 24px 56px; }
+    .wordmark-divider { height: 80px; }
+  }
 </style>
+<!-- Google Analytics GA4 — replace YOUR_GA4_ID with your Measurement ID (format: G-XXXXXXXXXX) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA4_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "YOUR_GA4_ID");
+</script>
 </head>
 <body>
 
@@ -375,35 +257,16 @@
 
 <main>
 
-  <!-- HOOK + THESIS (merged into one moment) -->
-  <!-- Placeholder tile grid below. TODO: replace with the real cube
-       logo unscrambling — faces start mismatched/rotated, then resolve
-       into the aligned mark shown in assets/logo-cube.png. This tile
-       grid is a structural stand-in until that animation is built. -->
-  <section class="hook scrambled" aria-label="Introduction">
-    <div class="tile-grid">
-      <div class="tile" style="left:6px;top:4px;transform:translate(-26px,-18px) rotate(-16deg);animation-delay:.02s"></div>
-      <div class="tile accent" style="left:54px;top:4px;transform:translate(18px,-22px) rotate(13deg);animation-delay:.06s"></div>
-      <div class="tile" style="left:102px;top:4px;transform:translate(-12px,20px) rotate(-8deg);animation-delay:.1s"></div>
-      <div class="tile accent" style="left:150px;top:4px;transform:translate(24px,-10px) rotate(18deg);animation-delay:.14s"></div>
-      <div class="tile" style="left:198px;top:4px;transform:translate(-20px,16px) rotate(-14deg);animation-delay:.18s"></div>
-      <div class="tile" style="left:6px;top:50px;transform:translate(20px,14px) rotate(15deg);animation-delay:.08s"></div>
-      <div class="tile accent" style="left:54px;top:50px;transform:translate(-16px,-12px) rotate(-11deg);animation-delay:.12s"></div>
-      <div class="tile" style="left:102px;top:50px;transform:translate(18px,18px) rotate(8deg);animation-delay:.16s"></div>
-      <div class="tile" style="left:150px;top:50px;transform:translate(-22px,-16px) rotate(-18deg);animation-delay:.2s"></div>
-      <div class="tile" style="left:198px;top:50px;transform:translate(12px,20px) rotate(12deg);animation-delay:.24s"></div>
-      <div class="tile" style="left:30px;top:96px;transform:translate(16px,-14px) rotate(10deg);animation-delay:.1s"></div>
-      <div class="tile accent" style="left:78px;top:96px;transform:translate(-18px,12px) rotate(-9deg);animation-delay:.14s"></div>
-      <div class="logo-reveal"><img src="assets/logo-cube.png" alt="Aditi Deshpande logo mark, a Rubik's cube reoriented so one face reads as a UI screen"></div>
+  <section class="hook" aria-label="Introduction">
+    <div class="hero-inner">
+      <div class="hero-rule" aria-hidden="true"></div>
+      <div class="hero-text">
+        <h1 class="hero-name">Aditi Deshpande.</h1>
+        <p class="hero-line">I <span class="accent-word">unscramble</span> software so it makes sense to the people using it.</p>
+      </div>
     </div>
-    <div class="hero-wrapper">
-      <span class="hero-name">Aditi Deshpande.</span>
-      <span class="hero-line">I unscramble software so it makes sense to the people using it.</span>
-    </div>
-    <div class="proof-strip-scatter">10 years · 15 min → 10 sec · 2× Spot Award · M.Des, IISc</div>
   </section>
 
-  <!-- PROOF STRIP -->
   <section class="proof-strip" aria-label="Career highlights">
     <ul>
       <li>10 years</li>
@@ -413,92 +276,45 @@
     </ul>
   </section>
 
-  <!-- RHYTHM BREAK -->
-  <section class="rhythm-break" aria-label="Transition">
-    Selected work
-  </section>
+  <div class="wordmark-divider" aria-hidden="true">
+    <img class="wordmark-ghost" src="assets/logo-cube.png" alt="">
+  </div>
 
-  <!-- WORK SELECTOR -->
   <section class="work-selector" aria-label="Selected work">
-    <div class="card-grid">
+    <div class="work-selector-inner">
+      <p class="section-eyebrow">+ selected work</p>
+      <h2 class="section-label">Case studies</h2>
+      <div class="card-grid">
 
-      <a class="card" href="case-studies/fingerprinting.html">
-        <div class="shard" style="top:14px;right:34px;transform:translate(8px,-10px) rotate(22deg)"></div>
-        <div class="shard" style="top:14px;right:16px;transform:translate(12px,6px) rotate(-16deg)"></div>
-        <div class="shard" style="top:30px;right:25px;transform:translate(-6px,12px) rotate(9deg)"></div>
-        <p class="card-title">Fingerprinting</p>
-        <p class="card-outcome">Manual discovery &rarr; instant suggestions</p>
-        <span class="card-open">Open case study &rarr;</span>
-      </a>
+        <a class="card" href="case-studies/fingerprinting.html">
+          <div class="shard" style="top:14px;right:34px;transform:translate(8px,-10px) rotate(22deg)"></div>
+          <div class="shard" style="top:14px;right:16px;transform:translate(12px,6px) rotate(-16deg)"></div>
+          <div class="shard" style="top:30px;right:25px;transform:translate(-6px,12px) rotate(9deg)"></div>
+          <p class="card-title">Fingerprinting</p>
+          <p class="card-outcome">Manual discovery &rarr; instant suggestions</p>
+          <span class="card-open">Open case study &rarr;</span>
+        </a>
 
-      <a class="card" href="case-studies/cloud-secret-sync.html">
-        <div class="shard" style="top:14px;right:34px;transform:translate(-10px,8px) rotate(-24deg)"></div>
-        <div class="shard" style="top:14px;right:16px;transform:translate(10px,-7px) rotate(20deg)"></div>
-        <div class="shard" style="top:30px;right:25px;transform:translate(7px,9px) rotate(-11deg)"></div>
-        <p class="card-title">Cloud secret sync</p>
-        <p class="card-outcome">15 min &rarr; 10 sec per item</p>
-        <span class="card-open">Open case study &rarr;</span>
-      </a>
+        <a class="card" href="case-studies/unified-authorization.html">
+          <div class="shard" style="top:14px;right:34px;transform:translate(-10px,8px) rotate(-24deg)"></div>
+          <div class="shard" style="top:14px;right:16px;transform:translate(10px,-7px) rotate(20deg)"></div>
+          <div class="shard" style="top:30px;right:25px;transform:translate(7px,9px) rotate(-11deg)"></div>
+          <p class="card-title">Unified authorization</p>
+          <p class="card-outcome">Two access models, combined into one</p>
+          <span class="card-open">Open case study &rarr;</span>
+        </a>
 
-      <a class="card" href="case-studies/ocpm.html">
-        <div class="shard" style="top:14px;right:34px;transform:translate(12px,9px) rotate(15deg)"></div>
-        <div class="shard" style="top:14px;right:16px;transform:translate(-7px,-9px) rotate(-18deg)"></div>
-        <div class="shard" style="top:30px;right:25px;transform:translate(9px,-5px) rotate(10deg)"></div>
-        <p class="card-title">OCPM analytics</p>
-        <p class="card-outcome">A new unit of analysis, same mental model</p>
-        <span class="card-open">Open case study &rarr;</span>
-      </a>
-
+      </div>
     </div>
   </section>
 
 </main>
 
-<footer>
+<footer class="site-footer">
   <a href="mailto:aditideshpandeux@gmail.com">Email</a>
   <a href="https://www.linkedin.com/in/deshpandeaditi/">LinkedIn</a>
   <a href="assets/resume.pdf">Resume</a>
 </footer>
-
-<script>
-  // Unscramble animation: transition hook from scrambled to ordered state
-  (function(){
-    const hookEl = document.querySelector('.hook');
-    if(!hookEl) return;
-    
-    // Check if user prefers reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
-    // If reduced motion, just show ordered state
-    if(prefersReducedMotion){
-      hookEl.classList.remove('scrambled');
-      hookEl.classList.add('ordered');
-      return;
-    }
-    
-    // Trigger transition after a brief delay or on first scroll
-    let transitioned = false;
-    
-    function unscramble(){
-      if(transitioned) return;
-      transitioned = true;
-      hookEl.classList.remove('scrambled');
-      hookEl.classList.add('ordered');
-    }
-    
-    // Listen for scroll to trigger unscramble
-    window.addEventListener('scroll', () => {
-      if(!transitioned && window.scrollY > 50){
-        unscramble();
-      }
-    }, { once: true });
-    
-    // Also trigger after 3.5 seconds if user hasn't scrolled
-    setTimeout(() => {
-      unscramble();
-    }, 3500);
-  })();
-</script>
 
 </body>
 </html>

@@ -1,0 +1,87 @@
+/* ============================================
+   SHARED DESIGN TOKENS & BASE STYLES
+   Linked from every page. Page-specific layout
+   lives in a per-page <style> block.
+   ============================================ */
+
+:root {
+  --paper: #FAFAF8;
+  --paper-warm: #F1EEE6;
+  --ink: #1C1C1A;
+  --ink-soft: #6B6963;
+  --line-soft: #DAD7CD;
+  --accent: #C1391D;
+  --accent-soft: #F3E3DD;
+  --cube-face: #DEDBD2;
+  --cube-edge: #B6B2A6;
+  --radius: 14px;
+  --display: "Abhaya Libre", serif;
+  --body: "DM Sans", sans-serif;
+  --mono: "DM Mono", monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- site header ---------- */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 28px 32px 0;
+}
+
+.mark { display: flex; align-items: center; gap: 10px; }
+.mark img { width: 28px; height: 28px; display: block; }
+.mark span {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.01em;
+}
+
+nav { display: flex; gap: 28px; font-size: 14px; color: var(--ink-soft); }
+nav a { transition: color .15s ease; }
+nav a:hover { color: var(--ink); }
+nav a[aria-current="page"] { color: var(--ink); }
+
+/* ---------- site footer ---------- */
+.site-footer {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 32px 64px;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.site-footer a:hover { color: var(--accent); }
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

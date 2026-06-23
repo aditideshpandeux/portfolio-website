@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unified authorization — Aditi Deshpande</title>
+<meta name="description" content="How Aditi combined two disconnected security models into one authoring flow, validated by security leadership and the architects who'd have to build it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@500;700&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  /* ---------- case study layout (shared with fingerprinting) ---------- */
+  .cs-hero {
+    background: var(--paper-warm);
+    padding: 64px 32px 56px;
+  }
+  .cs-hero-inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .cs-eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 0.08em;
+    margin: 0 0 20px;
+  }
+  .cs-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1.05;
+    margin: 0 0 24px;
+    letter-spacing: -0.01em;
+  }
+  .cs-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .cs-meta li::before {
+    content: "— ";
+    color: var(--cube-edge);
+  }
+
+  .cs-body {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 32px 96px;
+  }
+
+  .tldr {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 20px 24px;
+    margin: 48px 0 0;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .tldr strong {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .cs-section { margin-top: 56px; }
+  .cs-section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 12px;
+  }
+  .cs-section h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(20px, 2.5vw, 26px);
+    margin: 0 0 16px;
+    line-height: 1.2;
+  }
+  .cs-section p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin: 0 0 16px;
+  }
+  .cs-section p:last-child { margin-bottom: 0; }
+
+  .diagram {
+    margin: 36px 0;
+    background: var(--paper-warm);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+  }
+  .diagram figcaption {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-align: center;
+    margin-top: 16px;
+    letter-spacing: 0.02em;
+  }
+  .diagram svg {
+    display: block;
+    margin: 0 auto;
+    overflow: visible;
+  }
+
+  .honest-note {
+    background: var(--paper-warm);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-top: 24px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  .cs-next {
+    margin-top: 72px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .cs-next-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .cs-next-link {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--ink);
+    transition: color .15s ease;
+  }
+  .cs-next-link:hover { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    .cs-hero { padding: 48px 24px 40px; }
+    .cs-body { padding: 0 24px 64px; }
+    .cs-next { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+<!-- Google Analytics GA4 — replace YOUR_GA4_ID with your Measurement ID (format: G-XXXXXXXXXX) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA4_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "YOUR_GA4_ID");
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="mark">
+    <a href="../index.html">
+      <img src="../assets/logo-cube.png" alt="Aditi Deshpande — home">
+    </a>
+    <span>Aditi Deshpande</span>
+  </div>
+  <nav>
+    <a href="../work.html">Work</a>
+    <a href="../about.html">About</a>
+    <a href="../writing.html">Writing</a>
+  </nav>
+</header>
+
+<main>
+
+  <div class="cs-hero">
+    <div class="cs-hero-inner">
+      <p class="cs-eyebrow">Pegasystems · Launchpad</p>
+      <h1 class="cs-title">Unified authorization</h1>
+      <ul class="cs-meta">
+        <li>Product design</li>
+        <li>2023</li>
+        <li>Figma, Pega Studio</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cs-body">
+
+    <div class="tldr">
+      <strong>TL;DR</strong>
+      Pega's authorization setup forced two completely different security models into separate, disconnected flows. I combined them into one. Validated as workable by security leadership and the architects who'd actually have to build it. Never got prioritized for implementation — that's the honest ending, not a launch story.
+    </div>
+
+    <section class="cs-section" aria-labelledby="context-heading">
+      <p class="cs-section-label">Context</p>
+      <h2 id="context-heading">Built for citizen developers — but not really</h2>
+      <p>Meant for citizen developers configuring access control in Pega Launchpad. But realistically, setting up authorization requires someone who already understands the basics — role-based rules, attribute-based conditions, how the two interact. The product claimed to be approachable; the experience wasn't.</p>
+    </section>
+
+    <section class="cs-section" aria-labelledby="problem-heading">
+      <p class="cs-section-label">Problem</p>
+      <h2 id="problem-heading">Flexibility built at the cost of friction</h2>
+      <p>A heuristic review of the existing flow found several compounding problems. The system used Pega-specific terminology instead of language people already knew — so there was nothing to recognize, only things to learn. Settings had to be held in memory while switching between tabs, because nothing surfaced what had already been configured.</p>
+      <p>The interface wasn't built for anyone without deep familiarity — dense rows, horizontal scroll, no clear path through it. Even the documentation didn't help. And the two security models — role-based and attribute-based — lived in completely different places with no connection between them, even though any real authorization rule typically needs both.</p>
+    </section>
+
+    <section class="cs-section" aria-labelledby="process-heading">
+      <p class="cs-section-label">Process</p>
+      <h2 id="process-heading">No direct user access — so go to the next best source</h2>
+      <p>I didn't have direct access to the people who'd actually configure this at client companies. So I went to the next best source: solution architects, who build these systems for clients and see where people get stuck firsthand. They gave me real use cases and flagged where users would likely struggle.</p>
+      <p>Once I understood both models well enough to combine them, I ran a workshop with the Security stream director and the project owner — specifically to show that role-based and attribute-based rules could be merged into one model instead of staying two separate systems. From there, iteration went the same way as Fingerprinting: design reviews with the PO and architect, feedback folded back in. About 3 months total — roughly 1 month for heuristic analysis, research, architect calls, and design iteration specifically.</p>
+    </section>
+
+    <section class="cs-section" aria-labelledby="solution-heading">
+      <p class="cs-section-label">Solution</p>
+      <h2 id="solution-heading">Two moves, not one</h2>
+      <p>First: authorization configuration was pulled out of its own disconnected area and folded directly into the main flow of building a case type in Launchpad — no separate detour required.</p>
+      <p>Second: one view where role-based and attribute-based rules could be created together instead of separately. A rule like "tier 2 service specialists get elevated rights, and cases from a given location route to specialists in that location" becomes one configuration — not two systems to reconcile by hand.</p>
+
+      <!-- BEFORE: disjointed journey (5 pieces, crossing arrows) -->
+      <figure class="diagram" aria-label="Before: five disconnected pieces with a tangled path between them">
+        <svg width="560" height="380" viewBox="0 0 560 380" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diag-before-title">
+          <title id="diag-before-title">Before: five separate places to configure authorization — Case type, Permissions, Access role, Access groups, and Conditional access — connected by a tangled, non-sequential path of dashed arrows that cross each other multiple times.</title>
+
+          <!-- Label -->
+          <text x="280" y="16" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" fill="#6B6963" letter-spacing="0.05em">BEFORE</text>
+
+          <!--
+            Box layout — scattered with slight rotations:
+            A: Case type         top-left     centre ~(130, 60)
+            B: Permissions       top-right    centre ~(420, 80)
+            C: Access role       mid-left     centre ~(100, 190)
+            D: Access groups     mid-right    centre ~(430, 220)
+            E: Conditional access bottom-mid  centre ~(270, 310)
+
+            Arrow path (non-sequential, each skips to a non-adjacent box):
+            A→D, B→C, C→E, D→B (back-cross), E→A
+            This creates 4+ visible crossings.
+          -->
+
+          <!-- Dashed crossing arrows — drawn FIRST so boxes sit on top -->
+          <!-- Arrow A→D: top-left to mid-right (long diagonal) -->
+          <line x1="200" y1="68" x2="360" y2="208" stroke="#6B6963" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <polygon points="353,201 364,213 368,199" fill="#6B6963"/>
+
+          <!-- Arrow B→C: top-right to mid-left (long cross) -->
+          <line x1="340" y1="88" x2="170" y2="178" stroke="#6B6963" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <polygon points="163,170 166,184 178,175" fill="#6B6963"/>
+
+          <!-- Arrow C→E: mid-left down to bottom-mid -->
+          <line x1="160" y1="208" x2="230" y2="298" stroke="#6B6963" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <polygon points="223,291 227,305 237,296" fill="#6B6963"/>
+
+          <!-- Arrow D→B: mid-right back up to top-right (back-cross) -->
+          <line x1="400" y1="208" x2="400" y2="102" stroke="#6B6963" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <polygon points="394,108 400,97 406,108" fill="#6B6963"/>
+
+          <!-- Arrow E→A: bottom-mid back up to top-left (long back-cross) -->
+          <line x1="230" y1="300" x2="140" y2="80" stroke="#6B6963" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <polygon points="133,87 137,73 148,80" fill="#6B6963"/>
+
+          <!-- Box A: Case type — top-left, slight tilt -->
+          <g transform="rotate(-2, 130, 60)">
+            <rect x="30" y="38" width="200" height="44" rx="7" fill="#F1EEE6" stroke="#DAD7CD" stroke-width="1.5"/>
+            <text x="130" y="58" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A">Case type</text>
+            <text x="130" y="74" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="#6B6963">the unit of work</text>
+          </g>
+
+          <!-- Box B: Permissions — top-right, tilt other way -->
+          <g transform="rotate(2, 420, 80)">
+            <rect x="320" y="58" width="200" height="44" rx="7" fill="#F1EEE6" stroke="#DAD7CD" stroke-width="1.5"/>
+            <text x="420" y="78" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A">Permissions</text>
+            <text x="420" y="94" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="#6B6963">attached to access role</text>
+          </g>
+
+          <!-- Box C: Access role — mid-left, slight tilt -->
+          <g transform="rotate(-1.5, 100, 190)">
+            <rect x="0" y="168" width="200" height="44" rx="7" fill="#F1EEE6" stroke="#DAD7CD" stroke-width="1.5"/>
+            <text x="100" y="188" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A">Access role</text>
+            <text x="100" y="204" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="#6B6963">permissions attach here</text>
+          </g>
+
+          <!-- Box D: Access groups — mid-right, tilt -->
+          <g transform="rotate(2, 430, 220)">
+            <rect x="330" y="198" width="200" height="44" rx="7" fill="#F1EEE6" stroke="#DAD7CD" stroke-width="1.5"/>
+            <text x="430" y="218" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A">Access groups</text>
+            <text x="430" y="234" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="#6B6963">access role attaches here</text>
+          </g>
+
+          <!-- Box E: Conditional access — bottom-mid, slight tilt -->
+          <g transform="rotate(-1, 270, 310)">
+            <rect x="170" y="288" width="200" height="44" rx="7" fill="#F1EEE6" stroke="#DAD7CD" stroke-width="1.5"/>
+            <text x="270" y="308" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A">Conditional access</text>
+            <text x="270" y="324" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="#6B6963">built entirely separately</text>
+          </g>
+
+          <!-- Caption -->
+          <text x="280" y="366" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" fill="#6B6963">one task, five places to visit — none of them line up</text>
+        </svg>
+        <figcaption>One task, five separate places — each piece configured in a different part of the product, none connected to the others.</figcaption>
+      </figure>
+
+      <!-- AFTER: one unified authoring flow -->
+      <figure class="diagram" aria-label="After: authorization folded into a single case-type authoring flow">
+        <svg width="360" height="340" viewBox="0 0 360 340" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diag-after-title">
+          <title id="diag-after-title">After: three steps inside one unified flow — Define the case, Author permissions (with conditional access inline), Access role and groups assembled automatically.</title>
+
+          <!-- Label -->
+          <text x="180" y="16" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" fill="#6B6963" letter-spacing="0.05em">AFTER</text>
+
+          <!-- Outer dashed container -->
+          <rect x="10" y="24" width="340" height="232" rx="10" fill="none" stroke="#C1391D" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <text x="22" y="18" font-family="DM Mono, monospace" font-size="10" fill="#C1391D" letter-spacing="0.04em">building a case type — one flow</text>
+
+          <!-- Step 1: Define the case -->
+          <rect x="30" y="38" width="300" height="50" rx="7" fill="#F3E3DD" stroke="#C1391D" stroke-width="1.5"/>
+          <text x="180" y="59" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A" font-weight="500">Define the case</text>
+          <text x="180" y="76" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#6B6963">the basic unit of work</text>
+
+          <!-- Arrow -->
+          <line x1="180" y1="88" x2="180" y2="106" stroke="#C1391D" stroke-width="1.5"/>
+          <polygon points="174,103 180,112 186,103" fill="#C1391D"/>
+
+          <!-- Step 2: Author permissions — accent fill (the key change) -->
+          <rect x="30" y="112" width="300" height="54" rx="7" fill="#C1391D"/>
+          <text x="180" y="134" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#fff" font-weight="500">Author permissions</text>
+          <text x="180" y="152" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="rgba(255,255,255,0.78)">and conditional access, inline</text>
+
+          <!-- Arrow -->
+          <line x1="180" y1="166" x2="180" y2="184" stroke="#C1391D" stroke-width="1.5"/>
+          <polygon points="174,181 180,190 186,181" fill="#C1391D"/>
+
+          <!-- Step 3: Access role & groups -->
+          <rect x="30" y="190" width="300" height="50" rx="7" fill="#F3E3DD" stroke="#C1391D" stroke-width="1.5"/>
+          <text x="180" y="211" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A" font-weight="500">Access role &amp; groups</text>
+          <text x="180" y="228" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#6B6963">assembled automatically</text>
+
+          <!-- Checkmark callouts below the container -->
+          <text x="26" y="276" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A">✓</text>
+          <text x="44" y="276" font-family="DM Sans, sans-serif" font-size="12" fill="#6B6963">advanced users can still configure any piece on its own</text>
+
+          <text x="26" y="300" font-family="DM Sans, sans-serif" font-size="12" fill="#1C1C1A">✓</text>
+          <text x="44" y="300" font-family="DM Sans, sans-serif" font-size="12" fill="#6B6963">one view shows everything configured for access</text>
+        </svg>
+        <figcaption>Five disjointed pieces folded into one authoring flow — flexibility preserved, forced separation removed.</figcaption>
+      </figure>
+    </section>
+
+    <section class="cs-section" aria-labelledby="outcome-heading">
+      <p class="cs-section-label">Outcome</p>
+      <h2 id="outcome-heading">Validated. Not shipped.</h2>
+      <p>The workshop with security leadership and the architects confirmed the concept was sound and implementable. The two models could become one — that held up through iteration and review.</p>
+
+      <div class="honest-note">
+        It didn't get prioritized for build. There's no launch metric here. The work proved the concept was viable and got sign-off from the people who'd have to build it. That's the accurate version of what happened.
+      </div>
+    </section>
+
+    <nav class="cs-next" aria-label="Back to work">
+      <span class="cs-next-label">Back</span>
+      <a class="cs-next-link" href="fingerprinting.html">&larr; Fingerprinting</a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <a href="mailto:aditideshpandeux@gmail.com">Email</a>
+  <a href="https://www.linkedin.com/in/deshpandeaditi/">LinkedIn</a>
+  <a href="../assets/resume.pdf">Resume</a>
+</footer>
+
+</body>
+</html>
