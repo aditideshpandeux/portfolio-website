@@ -12,24 +12,6 @@
 <style>
   /* Homepage-specific layout only */
 
-  /* dotted grid device — cream sections only */
-  body {
-    background-image:
-      radial-gradient(circle, var(--line-soft) 1px, transparent 1px),
-      radial-gradient(circle, var(--line-soft) 1px, transparent 1px);
-    background-size: 32px 32px;
-    background-position: 0 0, 16px 16px;
-    position: relative;
-  }
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: var(--paper);
-    opacity: 0.55;
-    pointer-events: none;
-    z-index: 0;
-  }
   header, main, footer { position: relative; z-index: 1; }
 
   /* ---------- hero (full-bleed vermillion) ---------- */
@@ -45,16 +27,15 @@
     /* sit above the dotted grid overlay */
     isolation: isolate;
   }
-  /* subtle texture over the solid colour */
+  /* spacious grid lines over the vermillion */
   .hook::before {
     content: "";
     position: absolute;
     inset: 0;
     background-image:
-      radial-gradient(circle, rgba(250,250,248,0.12) 1px, transparent 1px),
-      radial-gradient(circle, rgba(250,250,248,0.12) 1px, transparent 1px);
-    background-size: 32px 32px;
-    background-position: 0 0, 16px 16px;
+      linear-gradient(rgba(250,250,248,0.10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(250,250,248,0.10) 1px, transparent 1px);
+    background-size: 80px 80px;
     pointer-events: none;
     z-index: 0;
   }
