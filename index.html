@@ -129,19 +129,21 @@
 
   /* ---------- proof strip ---------- */
   .proof-strip {
-    background: var(--paper-warm);
-    padding: 22px 32px;
+    background: #fff;
+    padding: 36px 40px;
     position: relative;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 100%;
   }
   .proof-strip ul {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 10px 18px;
-    max-width: 720px;
-    margin: 0 auto;
+    margin: 0;
     padding: 0;
     font-size: 14px;
     color: var(--ink-soft);
@@ -152,23 +154,11 @@
     margin-left: 18px;
     color: var(--cube-edge);
   }
-
-  /* ---------- ghosted logo divider (used once) ---------- */
-  .wordmark-divider {
-    position: relative;
-    overflow: hidden;
-    height: 140px;
-    background: var(--paper);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 40px;
-  }
-  .wordmark-ghost {
-    width: clamp(80px, 14vw, 160px);
-    height: auto;
-    opacity: 0.15;
-    margin-right: -2vw;
+  .proof-strip-logo {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    margin-left: 32px;
   }
 
   /* ---------- work selector ---------- */
@@ -255,7 +245,8 @@
     .hero-inner { margin-left: 0; padding: 40px 24px 60px; }
     .card-grid { grid-template-columns: 1fr; }
     .work-selector { padding: 48px 24px 56px; }
-    .wordmark-divider { height: 80px; }
+    .proof-strip { padding: 28px 24px; }
+    .proof-strip-logo { width: 40px; height: 40px; margin-left: 20px; }
   }
 </style>
 <!-- Google Analytics GA4 — replace YOUR_GA4_ID with your Measurement ID (format: G-XXXXXXXXXX) -->
@@ -311,11 +302,8 @@
       <li>2&times; Spot Award</li>
       <li>M.Des, IISc</li>
     </ul>
+    <img class="proof-strip-logo" src="assets/logo-cube.png" alt="" aria-hidden="true">
   </section>
-
-  <div class="wordmark-divider" aria-hidden="true">
-    <img class="wordmark-ghost" src="assets/logo-cube.png" alt="">
-  </div>
 
   <section class="work-selector" aria-label="Selected work">
     <div class="work-selector-inner">
