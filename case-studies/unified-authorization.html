@@ -19,6 +19,17 @@
     max-width: 720px;
     margin: 0 auto;
   }
+  .cs-back {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+    margin-bottom: 20px;
+    transition: color .15s ease;
+  }
+  .cs-back:hover { color: var(--accent); }
+
   .cs-eyebrow {
     font-family: var(--mono);
     font-size: 12px;
@@ -189,12 +200,11 @@
 
   <div class="cs-hero">
     <div class="cs-hero-inner">
+      <a class="cs-back" href="../index.html">&larr; Home</a>
       <p class="cs-eyebrow">Pegasystems · Launchpad</p>
       <h1 class="cs-title">Unified authorization</h1>
       <ul class="cs-meta">
-        <li>Product design</li>
         <li>2023</li>
-        <li>Figma, Pega Studio</li>
       </ul>
     </div>
   </div>
@@ -359,16 +369,6 @@
         </svg>
         <figcaption>Five disjointed pieces folded into one authoring flow — flexibility preserved, forced separation removed.</figcaption>
       </figure>
-    </section>
-
-    <section class="cs-section" aria-labelledby="outcome-heading">
-      <p class="cs-section-label">Outcome</p>
-      <h2 id="outcome-heading">Validated. Not shipped.</h2>
-      <p>The workshop with security leadership and the architects confirmed the concept was sound and implementable. The two models could become one — that held up through iteration and review.</p>
-
-      <div class="honest-note">
-        It didn't get prioritized for build. There's no launch metric here. The work proved the concept was viable and got sign-off from the people who'd have to build it. That's the accurate version of what happened.
-      </div>
     </section>
 
     <nav class="cs-next" aria-label="Back to work">
