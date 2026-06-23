@@ -27,7 +27,7 @@
     /* sit above the dotted grid overlay */
     isolation: isolate;
   }
-  /* spacious grid lines over the vermillion */
+  /* spacious grid lines over the vermillion, fading out near bottom-left text */
   .hook::before {
     content: "";
     position: absolute;
@@ -38,6 +38,8 @@
     background-size: 80px 80px;
     pointer-events: none;
     z-index: 0;
+    -webkit-mask-image: radial-gradient(ellipse 60% 55% at 18% 88%, transparent 30%, black 75%);
+    mask-image: radial-gradient(ellipse 60% 55% at 18% 88%, transparent 30%, black 75%);
   }
   .hook-header {
     position: relative;
