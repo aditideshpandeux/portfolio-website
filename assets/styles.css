@@ -50,7 +50,7 @@ button:focus-visible {
   padding: 28px 32px 0;
 }
 
-.mark { display: flex; align-items: center; gap: 10px; }
+.mark { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
 .mark img { width: 28px; height: 28px; display: block; }
 .mark span {
   font-family: var(--display);
